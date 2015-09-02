@@ -19,19 +19,26 @@ gBottomRightCorner_mm = 1/2 * gsize_mm;
 
 
 % get on focus positions in world coord. Note that the focus postions are
-% two points.
+% two points. d_mm can be either positive or negative or zero.
 
-% onFocusUpperLeft_mm = (gUpperLeftCorner_mm * D_mm - imgPoint_world_mm * d_mm)/(D_mm - d_mm);
-% onFocusBottomRight_mm = (gBottomRightCorner_mm * D_mm - imgPoint_world_mm * d_mm)/(D_mm - d_mm);
-
-onFocusUpperLeft_mm = (imgPoint_world_mm * (D_mm - d_mm) + gUpperLeftCorner_mm * d_mm)/ D_mm;
-onFocusBottomRight_mm = (imgPoint_world_mm * (D_mm - d_mm) + gBottomRightCorner_mm * d_mm)/ D_mm;
+onFocus1_mm = (imgPoint_world_mm * (D_mm - d_mm) + gUpperLeftCorner_mm * d_mm)/ D_mm;
+onFocus2_mm = (imgPoint_world_mm * (D_mm - d_mm) + gBottomRightCorner_mm * d_mm)/ D_mm;
 
 % next, light ray will pass through the above two points reach the f-plane,
 % by using this, we get the trace back point on f-plane 
+% This time we should worry about the upper-left or bottom-right corner.
 
-fBottomRightCorner_world_mm = - onFocusUpperLeft_mm / (D_mm - d_mm) * fgDistance_mm;
-fUpperLeftCorner_world_mm = - onFocusBottomRight_mm / (D_mm - d_mm) * fgDistance_mm;
+if d_mm >1e-5 
+    fBottomRightCorner_world_mm = - onFocus1_mm / (D_mm - d_mm) * fgDistance_mm;
+    fUpperLeftCorner_world_mm = - onFocus2_mm / (D_mm - d_mm) * fgDistance_mm;
+elseif   d_mm < - 1e-5
+    fBottomRightCorner_world_mm = -onFocus2_mm / (D_mm - d_mm) * fgDistance_mm;
+    fUpperLeftCorner_world_mm = -onFocus1_mm / (D_mm - d_mm) * fgDistance_mm;
+else % d_mm is very close to zero
+    fBottomRightCorner_world_mm = -onFocus2_mm / D_mm * fgDistance_mm;
+    fUpperLeftCorner_world_mm = fBottomRightCorner_world_mm;
+end
+    
 
 % Change the above to screen coordinate
 fUpperLeftPoint_mm = fUpperLeftCorner_world_mm + fsize_mm / 2;
