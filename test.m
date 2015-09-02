@@ -5,7 +5,7 @@ clear all;
 
 % define parameters
 
-d_mm = -1;
+d_mm = 3;
 f = 6;
 D_mm = 15 + d_mm;
 fgDistance_mm = 10;
