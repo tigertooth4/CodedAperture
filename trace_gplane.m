@@ -23,9 +23,17 @@ imgBRCorner_world_mm = imgBRCorner_mm - prjSize_mm / 2;
 onFocus_mm = - fPoint_world_mm / fgDistance_mm * (D_mm - d_mm);
 
 
-gBRCorner_world_mm = (onFocus_mm * D_mm - imgULCorner_world_mm * (D_mm - d_mm)) / d_mm;
-gULCorner_world_mm = (onFocus_mm * D_mm - imgBRCorner_world_mm * (D_mm - d_mm)) / d_mm;
+if d_mm > 1e-5
+    gBRCorner_world_mm = (onFocus_mm * D_mm - imgULCorner_world_mm * (D_mm - d_mm)) / d_mm;
+    gULCorner_world_mm = (onFocus_mm * D_mm - imgBRCorner_world_mm * (D_mm - d_mm)) / d_mm;
 
+elseif d_mm < -1e-5
+    gBRCorner_world_mm = (onFocus_mm * D_mm - imgBRCorner_world_mm * (D_mm - d_mm)) / d_mm;
+    gULCorner_world_mm = (onFocus_mm * D_mm - imgULCorner_world_mm * (D_mm - d_mm)) / d_mm;
+else
+    gBRCorner_world_mm = gsize_mm + gsize_mm / 2;
+    gULCorner_world_mm = gsize_mm - gsize_mm / 2;
+end
 % Change the above to screen coordinate
 upperLeftCorner_mm = gULCorner_world_mm + gsize_mm / 2;
 bottomRightCorner_mm = gBRCorner_world_mm + gsize_mm / 2;

@@ -5,7 +5,7 @@ clear all;
 
 % define parameters
 
-d_mm = 3;
+d_mm = 0.8;
 f = 6;
 D_mm = 15 + d_mm;
 fgDistance_mm = 10;
@@ -16,14 +16,14 @@ gsize_mm = [20,20];
 gsize_px = [20,20];
 
 fsize_mm = [20,20];
-fsize_px = [120,120];
+fsize_px = [80,80];
 
 
 prjSize_mm = fsize_mm * zoomFactor * D_mm/ (D_mm-d_mm);
 prjSize_px = [40,40];
 
 
-start_fPixel = [160,160];
+start_fPixel = [170,170];
 %[170, 170];
 
 % load the image

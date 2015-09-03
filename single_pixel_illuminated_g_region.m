@@ -8,14 +8,23 @@ function [upper_left_p, bottom_right_p, number_of_pixels, max_number_of_pixels] 
   fPixel_br_mm = px2mm(fPixel_px + [1,1], fsize_px, fsize_mm);
   
 %  
-  %[supposed_g_region1_ul_mm, ~ ] 
-  [~, supposed_g_region1_br_mm]= trace_gplane(prjPixel_px, prjSize_mm, prjSize_px, fPixel_ul_mm, d_mm, D_mm, gsize_mm, fsize_mm, fgDistance_mm);
-  %[~, supposed_g_region2_br_mm ] 
-  [supposed_g_region2_ul_mm]= trace_gplane(prjPixel_px, prjSize_mm, prjSize_px, fPixel_br_mm, d_mm, D_mm, gsize_mm, fsize_mm, fgDistance_mm);
+ if d_mm > 1e-5
+  %[~, supposed_g_region1_br_mm]
+  [~, supposed_g_region_bottom_right_mm]= trace_gplane(prjPixel_px, prjSize_mm, prjSize_px, fPixel_ul_mm, d_mm, D_mm, gsize_mm, fsize_mm, fgDistance_mm);
+  %[supposed_g_region2_ul_mm, ~]
+  [supposed_g_region_upper_left_mm, ~]= trace_gplane(prjPixel_px, prjSize_mm, prjSize_px, fPixel_br_mm, d_mm, D_mm, gsize_mm, fsize_mm, fgDistance_mm);
   
-  supposed_g_region_upper_left_mm = supposed_g_region2_ul_mm;
-  supposed_g_region_bottom_right_mm = supposed_g_region1_br_mm;
+  %supposed_g_region_upper_left_mm = supposed_g_region2_ul_mm;
+  %supposed_g_region_bottom_right_mm = supposed_g_region1_br_mm;
 
+ elseif d_mm < -1e-5 
+    [supposed_g_region_upper_left_mm, ~]= trace_gplane(prjPixel_px, prjSize_mm, prjSize_px, fPixel_ul_mm, d_mm, D_mm, gsize_mm, fsize_mm, fgDistance_mm);
+    [~, supposed_g_region_bottom_right_mm]= trace_gplane(prjPixel_px, prjSize_mm, prjSize_px, fPixel_br_mm, d_mm, D_mm, gsize_mm, fsize_mm, fgDistance_mm);
+ else
+     supposed_g_region_upper_left_mm = [0,0];
+     supposed_g_region_bottom_right_mm = gsize_mm;
+ end
+ 
   supposed_g_region_upper_left_p = mm2px(supposed_g_region_upper_left_mm, gsize_px, gsize_mm);
   supposed_g_region_bottom_right_p = mm2px(supposed_g_region_bottom_right_mm, gsize_px, gsize_mm);
   

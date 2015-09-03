@@ -5,7 +5,7 @@
 
 function [P, Q, Nmax] = buildPQ_all_pixels(fImage, d_mm, D_mm, fgDistance_mm, prjSize_px, prjSize_mm, gsize_px, gsize_mm, fsize_px, fsize_mm)
 
-    % Given an arbitrary point (imgX_mm, imgY_mm), to compute Nmax.
+    % Given an arbitrary point (prjPoint_px), to compute Nmax.
     prjPoint_px = [0,0];
     [~, ~, ~, Nmax] = f_PxInvolved4SingleXY(prjPoint_px, prjSize_px, prjSize_mm, gsize_mm, fsize_px, fsize_mm,  d_mm, D_mm, fgDistance_mm);
     
