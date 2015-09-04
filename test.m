@@ -5,7 +5,7 @@ clear all;
 
 % define parameters
 
-d_mm = 0.8;
+d_mm = 5; iteration = 20;
 f = 6;
 D_mm = 15 + d_mm;
 fgDistance_mm = 10;
@@ -16,11 +16,11 @@ gsize_mm = [20,20];
 gsize_px = [20,20];
 
 fsize_mm = [20,20];
-fsize_px = [80,80];
+fsize_px = [40,40];
 
 
 prjSize_mm = fsize_mm * zoomFactor * D_mm/ (D_mm-d_mm);
-prjSize_px = [40,40];
+prjSize_px = fsize_px;%[60,60];
 
 
 start_fPixel = [170,170];
@@ -40,24 +40,25 @@ fImg = sparse(im2double(fImage(start_fPixel(1) : start_fPixel(1) + fsize_px(1) -
 F = rand( fsize_px );
 G = rand( gsize_px ); 
 
+f_nomask = ones( fsize_px );
+g_nomask = ones( gsize_px );
 
-fmask = ones( fsize_px );
-gmask = ones( gsize_px );
-
-% recalculate the light field projection by using the all-pass fmask and
-% gmask
-projection = DownProj(P, Q, fmask, gmask, Nmax, prjSize_px);
-
-M = max(max(projection));
-
-image(projection / M * 50);
-%[F, G] = MultiUpdate(Img, F, G, P, Q, Nmax, screenW_p, screenH_p, gW_p, gH_p);
+flip_fImg = fliplr(flipud(fImg));
+[fmask, gmask] = MultiUpdate( flip_fImg, F, G, P, Q, Nmax, prjSize_px, iteration);
 
 
 %image(G * 50);
 %image(F * 50);
 
-%projected = DownProj(Img, P, Q, F, G, Nmax, screenW_p, screenH_p, gW_p, gH_p);
+nonMasked = DownProj(P, Q, f_nomask, g_nomask, Nmax, prjSize_px);
+masked = DownProj(P, Q, fmask, gmask, Nmax, prjSize_px);
+
+M1 = max(nonMasked(:));
+M2 = max(masked(:));
+
+image(nonMasked / M1 * 50);
+
+image(masked / M2 * 50);
 %image(projected * 50);
 
 %[R,S,PartOfQ] = PQ_inspect(P, Q, fsize_px, gsize_px,prjSize_px, M);
