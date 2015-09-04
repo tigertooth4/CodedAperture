@@ -16,7 +16,7 @@ gsize_mm = [20,20];
 gsize_px = [20,20];
 
 fsize_mm = [20,20];
-fsize_px = [80,80];
+fsize_px = [40,40];
 
 
 prjSize_mm = fsize_mm * zoomFactor * D_mm/ (D_mm-d_mm);
@@ -43,7 +43,7 @@ G = rand( gsize_px );
 f_nomask = ones( fsize_px );
 g_nomask = ones( gsize_px );
 
-flip_fImg = rot90(fImg,2);
+flip_fImg = fliplr(flipud(fImg));
 [fmask, gmask] = MultiUpdate( flip_fImg, F, G, P, Q, Nmax, prjSize_px, iteration);
 
 
@@ -58,7 +58,7 @@ M2 = max(masked(:));
 
 image(rot90(nonMasked,2) / M1 * 50);
 
-image(rot90(masked,2) / M2 * 50);
+image(fliplr(flipud(masked)) / M2 * 50);
 %image(projected * 50);
 
 %[R,S,PartOfQ] = PQ_inspect(P, Q, fsize_px, gsize_px,prjSize_px, M);
