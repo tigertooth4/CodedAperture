@@ -5,7 +5,7 @@ clear all;
 
 % define parameters
 
-d_mm = 5; iteration = 20;
+d_mm = -2; iteration = 20;
 f = 6;
 D_mm = 15 + d_mm;
 fgDistance_mm = 10;
